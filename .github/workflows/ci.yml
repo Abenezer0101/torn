@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+      - run: go vet ./...
+      - run: gofmt -l . | tee /dev/stderr | (! read)
+      - run: go test -race ./...
+      # The suite runs 5,000 seeds so it stays fast. CI has the time to run
+      # the number the README claims.
+      - run: go run ./cmd/torn -guards -seeds 100000
+      # And the time to let the fuzzer look for a counterexample the fixed
+      # seeds never reach.
+      - run: go test -run XXX -fuzz FuzzDecode -fuzztime 60s
+      - run: go test -run XXX -fuzz FuzzScenario -fuzztime 60s

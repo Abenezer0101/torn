@@ -84,7 +84,7 @@ tr[data-kind="stop"] td{color:var(--gone);font-weight:600}
 
   <p class="foot">Seeds 0, 4, 7, 38, 39, 88, 95 and 113 are the ones that went wrong without the guard.
   Seed 4 is the one that caught a bug in the test suite rather than the engine. Run it yourself with
-  <code>go run torn.go 4</code>.</p>
+  <code>go run ./cmd/torn -trace -guards 4</code>.</p>
 </div>
 
 <script>
